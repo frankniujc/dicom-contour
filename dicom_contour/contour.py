@@ -61,7 +61,11 @@ def get_roi_names(contour_data):
     """
     roi_seq_names = [roi_seq.ROIName for roi_seq in list(contour_data.StructureSetROISequence)]
     return roi_seq_names
-    
+
+def get_sop_id(dataset):
+    sop = [v for k, v in dataset._dict.items() if 'Referenced SOP Instance UID' in v]
+    import pdb; pdb.set_trace()
+
 
 
 def coord2pixels(contour_dataset, path):
@@ -84,6 +88,7 @@ def coord2pixels(contour_dataset, path):
 
     # extract the image id corresponding to given countour
     # read that dicom file
+    sop_id = get_sop_id(contour_dataset.ContourImageSequence[0])
     img_ID = contour_dataset.ContourImageSequence[0].ReferencedSOPInstanceUID
     img = dicom.read_file(path + img_ID + '.dcm')
     img_arr = img.pixel_array
